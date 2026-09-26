@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk"><ItemGroup>
+  <ProjectReference Include="..\EmailScanner.Domain\EmailScanner.Domain.csproj" />
+  <ProjectReference Include="..\EmailScanner.Domain.Abstractions\EmailScanner.Domain.Abstractions.csproj" />
+</ItemGroup><PropertyGroup><TargetFramework>net8.0</TargetFramework></PropertyGroup></Project>

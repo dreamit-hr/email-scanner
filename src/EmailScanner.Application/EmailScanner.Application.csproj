@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk"><ItemGroup>
+  <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+  <ProjectReference Include="..\EmailScanner.Application.Abstractions\EmailScanner.Application.Abstractions.csproj" />
+  <ProjectReference Include="..\EmailScanner.Domain\EmailScanner.Domain.csproj" />
+  <ProjectReference Include="..\EmailScanner.Repository.Abstractions\EmailScanner.Repository.Abstractions.csproj" />
+</ItemGroup><PropertyGroup><TargetFramework>net8.0</TargetFramework></PropertyGroup></Project>

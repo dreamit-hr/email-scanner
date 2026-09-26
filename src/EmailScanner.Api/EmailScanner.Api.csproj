@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web"><ItemGroup>
+  <PackageReference Include="Swashbuckle.AspNetCore" />
+  <PackageReference Include="Serilog.AspNetCore" />
+  <PackageReference Include="Serilog.Sinks.Console" />
+  <PackageReference Include="Serilog.Sinks.File" />
+  <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
+  <PackageReference Include="Azure.Core" />
+  <ProjectReference Include="..\EmailScanner.Application\EmailScanner.Application.csproj" />
+  <ProjectReference Include="..\EmailScanner.Repository\EmailScanner.Repository.csproj" />
+  <ProjectReference Include="..\EmailScanner.Infrastructure.ValKey\EmailScanner.Infrastructure.ValKey.csproj" />
+  <ProjectReference Include="..\EmailScanner.Infrastructure.BlobStorage\EmailScanner.Infrastructure.BlobStorage.csproj" />
+</ItemGroup><PropertyGroup><TargetFramework>net8.0</TargetFramework></PropertyGroup></Project>

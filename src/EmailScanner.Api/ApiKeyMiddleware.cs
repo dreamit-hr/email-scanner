@@ -15,7 +15,7 @@ public sealed class ApiKeyMiddleware(RequestDelegate next)
 {
     public async Task InvokeAsync(HttpContext context, ApiKeyValidator validator)
     {
-        if (context.Request.Path.StartsWithSegments("/health") || context.Request.Path == "/swagger")
+        if (context.Request.Path.StartsWithSegments("/health") || context.Request.Path.StartsWithSegments("/swagger"))
         {
             await next(context);
             return;

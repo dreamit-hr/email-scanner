@@ -32,7 +32,7 @@ public sealed class MailboxConnectionRepository(EmailScannerDbContext context) :
     public Task<IReadOnlyList<MailboxConnection>> ListAsync(Expression<Func<MailboxConnection, bool>> predicate, CancellationToken cancellationToken = default) => _repository.ListAsync(predicate, cancellationToken);
     public void Add(MailboxConnection entity) => _repository.Add(entity);
     public void Remove(MailboxConnection entity) => _repository.Remove(entity);
-    public async Task<IReadOnlyList<MailboxConnection>> GetEnabledAsync(CancellationToken cancellationToken = default) => await context.MailboxConnections.AsNoTracking().Where(x => x.Status == MailboxConnectionStatus.Enabled).ToListAsync(cancellationToken);
+    public async Task<IReadOnlyList<MailboxConnection>> GetEnabledAsync(CancellationToken cancellationToken = default) => await context.MailboxConnection.AsNoTracking().Where(x => x.Status == MailboxConnectionStatus.Enabled).ToListAsync(cancellationToken);
 }
 
 public sealed class EmailRepository(EmailScannerDbContext context) : IEmailRepository

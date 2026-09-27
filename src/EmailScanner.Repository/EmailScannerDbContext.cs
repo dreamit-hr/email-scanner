@@ -5,19 +5,19 @@ namespace EmailScanner.Repository;
 
 public sealed class EmailScannerDbContext(DbContextOptions<EmailScannerDbContext> options) : DbContext(options)
 {
-    public DbSet<Tenant> Tenants => Set<Tenant>();
-    public DbSet<MailboxConnection> MailboxConnections => Set<MailboxConnection>();
-    public DbSet<MailboxCredential> MailboxCredentials => Set<MailboxCredential>();
-    public DbSet<Email> Emails => Set<Email>();
-    public DbSet<EmailRecipient> EmailRecipients => Set<EmailRecipient>();
-    public DbSet<Attachment> Attachments => Set<Attachment>();
-    public DbSet<EmailRule> EmailRules => Set<EmailRule>();
-    public DbSet<EmailRuleCondition> EmailRuleConditions => Set<EmailRuleCondition>();
-    public DbSet<EmailRuleAction> EmailRuleActions => Set<EmailRuleAction>();
-    public DbSet<Webhook> Webhooks => Set<Webhook>();
-    public DbSet<WebhookDelivery> WebhookDeliveries => Set<WebhookDelivery>();
-    public DbSet<EmailTag> EmailTags => Set<EmailTag>();
-    public DbSet<EmailTagAssignment> EmailTagAssignments => Set<EmailTagAssignment>();
+    public DbSet<Tenant> Tenant => Set<Tenant>();
+    public DbSet<MailboxConnection> MailboxConnection => Set<MailboxConnection>();
+    public DbSet<MailboxCredential> MailboxCredential => Set<MailboxCredential>();
+    public DbSet<Email> Email => Set<Email>();
+    public DbSet<EmailRecipient> EmailRecipient => Set<EmailRecipient>();
+    public DbSet<Attachment> Attachment => Set<Attachment>();
+    public DbSet<EmailRule> EmailRule => Set<EmailRule>();
+    public DbSet<EmailRuleCondition> EmailRuleCondition => Set<EmailRuleCondition>();
+    public DbSet<EmailRuleAction> EmailRuleAction => Set<EmailRuleAction>();
+    public DbSet<Webhook> Webhook => Set<Webhook>();
+    public DbSet<WebhookDelivery> WebhookDelivery => Set<WebhookDelivery>();
+    public DbSet<EmailTag> EmailTag => Set<EmailTag>();
+    public DbSet<EmailTagAssignment> EmailTagAssignment => Set<EmailTagAssignment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

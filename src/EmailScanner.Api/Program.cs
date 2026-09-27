@@ -40,6 +40,12 @@ builder.Services.AddEmailScannerValKey(builder.Configuration);
 builder.Services.AddEmailScannerBlobStorage(builder.Configuration);
 
 var app = builder.Build();
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<EmailScannerDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
+
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseSerilogRequestLogging();
 app.UseMiddleware<CorrelationIdMiddleware>();

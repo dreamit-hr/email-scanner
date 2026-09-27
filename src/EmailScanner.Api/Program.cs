@@ -28,7 +28,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 builder.Services.AddHealthChecks().AddSqlServer(builder.Configuration.GetConnectionString("EmailScanner") ?? string.Empty).AddCheck<ValKeyHealthCheck>("valkey").AddCheck<BlobStorageHealthCheck>("blob-storage");
-builder.Services.AddEmailScannerApplication();
+builder.Services.AddEmailScannerApplication(builder.Configuration);
 builder.Services.AddEmailScannerRepository(builder.Configuration);
 builder.Services.AddSingleton<ApiKeyValidator>();
 builder.Services.AddHttpContextAccessor();

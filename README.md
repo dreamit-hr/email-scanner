@@ -46,6 +46,8 @@ The worker hosts are separate deployable processes so mailbox polling, email par
 
 The mailbox sync worker polls enabled IMAP connections using MailKit. Configure it with `ConnectionStrings__EmailScanner`, `BlobStorage__ConnectionString`, `BlobStorage__ContainerName`, and `ValKey__ConnectionString`; `MailboxSync__PollIntervalSeconds` is optional and defaults to 30. Run it with `dotnet run --project src/EmailScanner.Worker.MailboxSync`. IMAP connections require provider value `2`, host, port, username, and a password in `ImapCredentialReference`. The worker uses IMAP UID validity and UID checkpoints for delta sync, stores the original MIME message in blob storage, and saves message and recipient records to SQL Server.
 
+The email processing worker classifies queued emails and saves extracted documents and entities. Run it with `dotnet run --project src/EmailScanner.Worker.EmailProcessing`; it reads the same SQL Server connection string and ValKey settings. `EmailClassification:PersistThreshold` and `EmailClassification:LlmThreshold` are percentage values, defaulting to 90 and 60. LLM fallback is disabled in the sample config until `AzureOpenAI:Endpoint`, `AzureOpenAI:Deployment`, and `AzureOpenAI:ApiKey` are configured; enable it with `EmailClassification:EnableLlmClassification=true`. The deployment defaults to `gpt-5-mini`. Manage tenant-specific sender rules through `GET`, `GET/{id}`, `POST`, `PUT/{id}`, and `DELETE/{id}` under `/api/v1/watched-senders`; write operations require `rules:write`.
+
 ## Tests
 
 Run `dotnet test EmailScanner.sln`. Domain tests cover ownership and value validation, application tests cover feature result semantics, and repository tests validate the EF model without requiring a live SQL Server.

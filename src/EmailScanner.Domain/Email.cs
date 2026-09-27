@@ -9,11 +9,16 @@ public sealed class Email : AuditableEntity, IAggregateRoot
     private readonly List<Attachment> _attachments = [];
     private readonly HashSet<Guid> _tags = [];
     private Email() { }
-    public Email(Guid mailboxConnectionId, string internetMessageId, string sender, string subject, string body, DateTime receivedUtc, string mimeBlobPath, string mimeHash)
+    public Email(Guid mailboxConnectionId, string internetMessageId, string sender, string subject, string body, DateTime receivedUtc, string mimeBlobPath, string mimeHash, Guid? id = null)
     {
         if (mailboxConnectionId == Guid.Empty) throw new ArgumentException("Mailbox id is required.", nameof(mailboxConnectionId));
         ArgumentException.ThrowIfNullOrWhiteSpace(internetMessageId);
         MailboxConnectionId = mailboxConnectionId; InternetMessageId = internetMessageId.Trim();
+        if (id.HasValue)
+        {
+            if (id.Value == Guid.Empty) throw new ArgumentException("Email id cannot be empty.", nameof(id));
+            Id = id.Value;
+        }
         Sender = EmailAddressValue.Create(sender).Value; Subject = subject ?? string.Empty; Body = body ?? string.Empty;
         ReceivedUtc = receivedUtc.Kind == DateTimeKind.Utc ? receivedUtc : throw new ArgumentException("Timestamp must be UTC.", nameof(receivedUtc));
         MimeBlobPath = mimeBlobPath; MimeHash = mimeHash; ImportedUtc = DateTime.UtcNow; Status = EmailStatus.Queued;

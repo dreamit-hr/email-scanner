@@ -47,13 +47,6 @@ public sealed class MailboxConnection : AuditableEntity, IAggregateRoot
     public void UpdateFolder(string folder) { ArgumentException.ThrowIfNullOrWhiteSpace(folder); Folder = folder.Trim(); Touch(null); }
     public void UpdateImapSettings(string? host, int? port, string? username, string? credentialReference)
     {
-        if (Provider == MailboxProvider.Imap)
-        {
-            ArgumentException.ThrowIfNullOrWhiteSpace(host);
-            ArgumentException.ThrowIfNullOrWhiteSpace(username);
-            ArgumentException.ThrowIfNullOrWhiteSpace(credentialReference);
-            if (port is < 1 or > 65535) throw new ArgumentOutOfRangeException(nameof(port));
-        }
         ImapHost = string.IsNullOrWhiteSpace(host) ? null : host.Trim();
         ImapPort = port;
         ImapUsername = string.IsNullOrWhiteSpace(username) ? null : username.Trim();

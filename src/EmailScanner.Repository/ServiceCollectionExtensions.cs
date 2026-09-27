@@ -16,6 +16,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IMailboxConnectionRepository, MailboxConnectionRepository>();
         services.AddScoped<IEmailRepository, EmailRepository>();
         services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+        services.AddScoped<IWatchedSenderRepository, WatchedSenderRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }

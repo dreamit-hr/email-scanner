@@ -53,6 +53,21 @@ public sealed class AttachmentRepository(EmailScannerDbContext context) : IAttac
     public void Remove(Attachment entity) => _repository.Remove(entity);
 }
 
+public sealed class WatchedSenderRepository(EmailScannerDbContext context) : IWatchedSenderRepository
+{
+    public Task<WatchedSender?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
+        context.WatchedSender.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+    public async Task<IReadOnlyList<WatchedSender>> ListForTenantAsync(Guid tenantId, CancellationToken cancellationToken = default) =>
+        await context.WatchedSender.AsNoTracking().Where(x => x.TenantId == tenantId).OrderBy(x => x.Name).ToListAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<WatchedSender>> GetEnabledForTenantAsync(Guid tenantId, CancellationToken cancellationToken = default) =>
+        await context.WatchedSender.AsNoTracking().Where(x => x.TenantId == tenantId && x.IsEnabled).ToListAsync(cancellationToken);
+
+    public void Add(WatchedSender sender) => context.WatchedSender.Add(sender);
+    public void Remove(WatchedSender sender) => context.WatchedSender.Remove(sender);
+}
+
 public sealed class UnitOfWork(EmailScannerDbContext context) : IUnitOfWork
 {
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => context.SaveChangesAsync(cancellationToken);

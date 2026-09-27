@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk"><ItemGroup>
   <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+  <PackageReference Include="Azure.AI.OpenAI" />
+  <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
   <ProjectReference Include="..\EmailScanner.Application.Abstractions\EmailScanner.Application.Abstractions.csproj" />
   <ProjectReference Include="..\EmailScanner.Domain\EmailScanner.Domain.csproj" />
   <ProjectReference Include="..\EmailScanner.Repository.Abstractions\EmailScanner.Repository.Abstractions.csproj" />

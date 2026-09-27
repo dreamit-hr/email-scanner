@@ -126,12 +126,38 @@ internal sealed class ImapMailboxSyncService(
             message.TextBody ?? message.HtmlBody ?? string.Empty,
             receivedUtc,
             mimeBlobPath,
-            mimeHash);
+            mimeHash,
+            emailId);
 
         AddRecipients(email, message.To, RecipientType.To);
         AddRecipients(email, message.Cc, RecipientType.Cc);
         AddRecipients(email, message.Bcc, RecipientType.Bcc);
+        await StoreAttachmentsAsync(email, message, cancellationToken);
         dbContext.Email.Add(email);
+    }
+
+    private async Task StoreAttachmentsAsync(Email email, MimeMessage message, CancellationToken cancellationToken)
+    {
+        foreach (var mimePart in message.Attachments.OfType<MimePart>())
+        {
+            if (mimePart.Content is null) continue;
+            await using var content = new MemoryStream();
+            await mimePart.Content.DecodeToAsync(content, cancellationToken);
+            var bytes = content.ToArray();
+            var attachmentId = Guid.NewGuid();
+            var fileName = string.IsNullOrWhiteSpace(mimePart.FileName) ? $"attachment-{attachmentId:N}.bin" : mimePart.FileName;
+            var blobPath = pathProvider.Attachment(attachmentId, fileName);
+            var hash = Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant();
+            await using (var upload = new MemoryStream(bytes, writable: false))
+                await blobStorage.UploadAsync(blobPath, upload, mimePart.ContentType.MimeType, cancellationToken);
+            email.AddAttachment(new EmailScanner.Domain.Attachment(
+                email.Id,
+                fileName,
+                mimePart.ContentType.MimeType,
+                bytes.LongLength,
+                hash,
+                blobPath));
+        }
     }
 
     private static void AddRecipients(Email email, InternetAddressList addresses, RecipientType recipientType)

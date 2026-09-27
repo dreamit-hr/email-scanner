@@ -13,6 +13,6 @@ public sealed class EmailScannerModelTests
         var options = new DbContextOptionsBuilder<EmailScannerDbContext>().UseSqlServer("Server=localhost;Database=EmailScanner;User Id=sa;Password=NotARealPassword123!;TrustServerCertificate=True").Options;
         using var context = new EmailScannerDbContext(options);
         var names = context.Model.GetEntityTypes().Select(x => x.GetTableName()).ToHashSet();
-        names.Should().Contain(["Tenants", "MailboxConnections", "Emails", "Attachments", "EmailRules", "Webhooks", "WebhookDeliveries", "EmailTags"]);
+        names.Should().Contain(["Tenants", "MailboxConnections", "Emails", "Attachments", "EmailRules", "Webhooks", "WebhookDeliveries", "EmailTags", "EmailExtractedDocuments", "EmailExtractedEntities", "WatchedSenders"]);
     }
 }

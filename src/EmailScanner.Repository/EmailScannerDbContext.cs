@@ -18,6 +18,9 @@ public sealed class EmailScannerDbContext(DbContextOptions<EmailScannerDbContext
     public DbSet<WebhookDelivery> WebhookDelivery => Set<WebhookDelivery>();
     public DbSet<EmailTag> EmailTag => Set<EmailTag>();
     public DbSet<EmailTagAssignment> EmailTagAssignment => Set<EmailTagAssignment>();
+    public DbSet<EmailExtractedDocument> EmailExtractedDocument => Set<EmailExtractedDocument>();
+    public DbSet<EmailExtractedEntity> EmailExtractedEntity => Set<EmailExtractedEntity>();
+    public DbSet<WatchedSender> WatchedSender => Set<WatchedSender>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

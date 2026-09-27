@@ -98,3 +98,45 @@ public sealed class EmailTagAssignmentConfiguration : IEntityTypeConfiguration<E
 {
     public void Configure(EntityTypeBuilder<EmailTagAssignment> builder) { builder.ToTable("EmailTagAssignments"); builder.HasKey(x => x.Id); builder.HasIndex(x => new { x.EmailId, x.EmailTagId }).IsUnique(); builder.Ignore(x => x.DomainEvents); builder.Ignore(x => x.State); }
 }
+
+public sealed class EmailExtractedDocumentConfiguration : IEntityTypeConfiguration<EmailExtractedDocument>
+{
+    public void Configure(EntityTypeBuilder<EmailExtractedDocument> builder)
+    {
+        builder.ToTable("EmailExtractedDocuments");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.DocumentType).HasMaxLength(200).IsRequired();
+        builder.Property(x => x.Confidence).HasPrecision(5, 4);
+        builder.Property(x => x.Summary).HasMaxLength(4000).IsRequired();
+        builder.Property(x => x.CreatedUtc).HasColumnType("datetime2");
+        builder.HasIndex(x => x.EmailId).IsUnique();
+        builder.HasOne<Email>().WithMany().HasForeignKey(x => x.EmailId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(x => x.Entities).WithOne().HasForeignKey(x => x.EmailExtractedDocumentId).OnDelete(DeleteBehavior.Cascade);
+        builder.Navigation(x => x.Entities).HasField("_entities").UsePropertyAccessMode(PropertyAccessMode.Field);
+    }
+}
+
+public sealed class EmailExtractedEntityConfiguration : IEntityTypeConfiguration<EmailExtractedEntity>
+{
+    public void Configure(EntityTypeBuilder<EmailExtractedEntity> builder)
+    {
+        builder.ToTable("EmailExtractedEntities");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.EntityType).HasMaxLength(100).IsRequired();
+        builder.Property(x => x.Value).HasMaxLength(2000).IsRequired();
+        builder.Property(x => x.Confidence).HasPrecision(5, 4);
+        builder.Property(x => x.Source).HasMaxLength(100).IsRequired();
+    }
+}
+
+public sealed class WatchedSenderConfiguration : IEntityTypeConfiguration<WatchedSender>
+{
+    public void Configure(EntityTypeBuilder<WatchedSender> builder)
+    {
+        builder.ToTable("WatchedSenders");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
+        builder.Property(x => x.EmailDomain).HasMaxLength(255).IsRequired();
+        builder.HasIndex(x => new { x.TenantId, x.EmailDomain }).IsUnique();
+    }
+}

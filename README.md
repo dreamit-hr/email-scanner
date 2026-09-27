@@ -44,6 +44,8 @@ The API accepts API keys through the client ID and secret headers. Webhook entit
 
 The worker hosts are separate deployable processes so mailbox polling, email parsing, and attachment processing can be scaled independently. Their provider adapters and operational queue configuration should be supplied for each deployment environment.
 
+The mailbox sync worker polls enabled IMAP connections using MailKit. Configure it with `ConnectionStrings__EmailScanner`, `BlobStorage__ConnectionString`, `BlobStorage__ContainerName`, and `ValKey__ConnectionString`; `MailboxSync__PollIntervalSeconds` is optional and defaults to 30. Run it with `dotnet run --project src/EmailScanner.Worker.MailboxSync`. IMAP connections require provider value `2`, host, port, username, and a password in `ImapCredentialReference`. The worker uses IMAP UID validity and UID checkpoints for delta sync, stores the original MIME message in blob storage, and saves message and recipient records to SQL Server.
+
 ## Tests
 
 Run `dotnet test EmailScanner.sln`. Domain tests cover ownership and value validation, application tests cover feature result semantics, and repository tests validate the EF model without requiring a live SQL Server.

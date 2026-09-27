@@ -11,6 +11,9 @@ public sealed class TenantConfiguration : IEntityTypeConfiguration<Tenant>
         builder.ToTable("Tenants"); builder.HasKey(x => x.Id); builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
         builder.Property(x => x.Description).HasMaxLength(1000); builder.HasIndex(x => x.Name).IsUnique();
         builder.Property(x => x.CreatedUtc).HasColumnType("datetime2"); builder.Property(x => x.UpdatedUtc).HasColumnType("datetime2");
+        builder.Navigation(x => x.MailboxConnections).HasField("_mailboxes").UsePropertyAccessMode(PropertyAccessMode.Field);
+        builder.Navigation(x => x.EmailRules).HasField("_rules").UsePropertyAccessMode(PropertyAccessMode.Field);
+        builder.Navigation(x => x.Webhooks).HasField("_webhooks").UsePropertyAccessMode(PropertyAccessMode.Field);
         builder.Ignore(x => x.DomainEvents); builder.Ignore(x => x.State);
     }
 }
@@ -22,6 +25,7 @@ public sealed class MailboxConnectionConfiguration : IEntityTypeConfiguration<Ma
         builder.ToTable("MailboxConnections"); builder.HasKey(x => x.Id);
         builder.Property(x => x.EmailAddress).HasMaxLength(320).IsRequired(); builder.Property(x => x.DisplayName).HasMaxLength(256);
         builder.Property(x => x.Folder).HasMaxLength(512).IsRequired(); builder.Property(x => x.SyncToken).HasMaxLength(4000);
+        builder.Property(x => x.ImapHost).HasMaxLength(255); builder.Property(x => x.ImapUsername).HasMaxLength(320); builder.Property(x => x.ImapCredentialReference).HasMaxLength(512);
         builder.HasIndex(x => new { x.TenantId, x.EmailAddress }); builder.HasIndex(x => new { x.Status, x.LastSyncUtc });
         builder.Property(x => x.CreatedUtc).HasColumnType("datetime2"); builder.Property(x => x.UpdatedUtc).HasColumnType("datetime2");
         builder.Ignore(x => x.DomainEvents); builder.Ignore(x => x.State);
@@ -39,6 +43,8 @@ public sealed class EmailConfiguration : IEntityTypeConfiguration<Email>
         builder.Ignore(x => x.BodyPreview); builder.Ignore(x => x.HasAttachments); builder.Ignore(x => x.Tags);
         builder.HasMany(x => x.Recipients).WithOne().HasForeignKey(x => x.EmailId).OnDelete(DeleteBehavior.Cascade);
         builder.HasMany(x => x.Attachments).WithOne().HasForeignKey(x => x.EmailId).OnDelete(DeleteBehavior.Cascade);
+        builder.Navigation(x => x.Recipients).HasField("_recipients").UsePropertyAccessMode(PropertyAccessMode.Field);
+        builder.Navigation(x => x.Attachments).HasField("_attachments").UsePropertyAccessMode(PropertyAccessMode.Field);
         builder.Ignore(x => x.DomainEvents); builder.Ignore(x => x.State);
     }
 }
@@ -60,7 +66,7 @@ public sealed class AttachmentConfiguration : IEntityTypeConfiguration<Attachmen
 
 public sealed class EmailRuleConfiguration : IEntityTypeConfiguration<EmailRule>
 {
-    public void Configure(EntityTypeBuilder<EmailRule> builder) { builder.ToTable("EmailRules"); builder.HasKey(x => x.Id); builder.Property(x => x.Name).HasMaxLength(200).IsRequired(); builder.HasIndex(x => new { x.TenantId, x.Priority }); builder.HasMany(x => x.Conditions).WithOne().HasForeignKey(x => x.EmailRuleId).OnDelete(DeleteBehavior.Cascade); builder.HasMany(x => x.Actions).WithOne().HasForeignKey(x => x.EmailRuleId).OnDelete(DeleteBehavior.Cascade); builder.Ignore(x => x.DomainEvents); builder.Ignore(x => x.State); }
+    public void Configure(EntityTypeBuilder<EmailRule> builder) { builder.ToTable("EmailRules"); builder.HasKey(x => x.Id); builder.Property(x => x.Name).HasMaxLength(200).IsRequired(); builder.HasIndex(x => new { x.TenantId, x.Priority }); builder.HasMany(x => x.Conditions).WithOne().HasForeignKey(x => x.EmailRuleId).OnDelete(DeleteBehavior.Cascade); builder.HasMany(x => x.Actions).WithOne().HasForeignKey(x => x.EmailRuleId).OnDelete(DeleteBehavior.Cascade); builder.Navigation(x => x.Conditions).HasField("_conditions").UsePropertyAccessMode(PropertyAccessMode.Field); builder.Navigation(x => x.Actions).HasField("_actions").UsePropertyAccessMode(PropertyAccessMode.Field); builder.Ignore(x => x.DomainEvents); builder.Ignore(x => x.State); }
 }
 
 public sealed class EmailRuleConditionConfiguration : IEntityTypeConfiguration<EmailRuleCondition>

@@ -1,6 +1,6 @@
 namespace EmailScanner.Domain;
 
-public enum MailboxProvider { MicrosoftGraph, Gmail, Imap }
+public enum MailboxProvider { MicrosoftGraph = 0, Gmail = 1, Imap = 2 }
 public enum MailboxConnectionStatus { Pending, Enabled, Disabled, Syncing, Failed }
 public enum MailboxSyncMode { Full, Delta }
 public enum EmailStatus { Queued, Processing, Processed, Failed }

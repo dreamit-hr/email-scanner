@@ -1,5 +1,4 @@
 using EmailScanner.Application.Abstractions;
-using EmailScanner.Application.MailboxConnections;
 using EmailScanner.Repository.Abstractions;
 
 namespace EmailScanner.Application.MailboxConnections.GetMailboxConnections;

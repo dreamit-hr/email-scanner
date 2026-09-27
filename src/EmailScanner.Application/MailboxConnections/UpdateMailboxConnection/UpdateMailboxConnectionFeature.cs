@@ -15,6 +15,11 @@ public sealed class UpdateMailboxConnectionFeature(IValidator<UpdateMailboxConne
         if (clientContext.Client?.TenantId != mailbox.TenantId || !permissionChecker.HasPermission(Permissions.MailboxWrite)) return FeatureResult<bool>.Forbidden();
         mailbox.UpdateDetails(request.DisplayName, request.SyncMode);
         mailbox.UpdateFolder(request.Folder);
+        mailbox.UpdateImapSettings(
+            request.ImapHost ?? mailbox.ImapHost,
+            request.ImapPort ?? mailbox.ImapPort,
+            request.ImapUsername ?? mailbox.ImapUsername,
+            request.ImapCredentialReference ?? mailbox.ImapCredentialReference);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return FeatureResult<bool>.Success(true);
     }

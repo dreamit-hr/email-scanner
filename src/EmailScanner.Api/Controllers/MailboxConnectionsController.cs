@@ -37,7 +37,7 @@ public sealed class MailboxConnectionsController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] MailboxConnectionUpdateBody body, [FromServices] UpdateMailboxConnectionFeature feature, CancellationToken cancellationToken)
     {
-        var request = new UpdateMailboxConnectionRequest(id, body.DisplayName, body.Folder, body.SyncMode);
+        var request = new UpdateMailboxConnectionRequest(id, body.DisplayName, body.Folder, body.SyncMode, body.ImapHost, body.ImapPort, body.ImapUsername, body.ImapCredentialReference);
         var result = await feature.ExecuteAsync(request, cancellationToken);
         return StatusCode(result.StatusCode, result);
     }

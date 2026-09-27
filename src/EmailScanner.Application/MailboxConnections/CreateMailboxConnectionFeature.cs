@@ -21,8 +21,16 @@ public sealed class CreateMailboxConnectionFeature(
         if (tenant is null || !tenant.IsEnabled) return FeatureResult<Guid>.NotFound("Enabled tenant was not found.");
         if (clientContext.Client?.TenantId != request.TenantId) return FeatureResult<Guid>.Forbidden();
         if (!permissionChecker.HasPermission(Permissions.MailboxWrite)) return FeatureResult<Guid>.Forbidden();
-        var mailbox = new MailboxConnection(request.TenantId, request.Provider, request.EmailAddress, request.DisplayName, request.Folder);
-        mailboxes.Add(mailbox);
+        var mailbox = new MailboxConnection(request.TenantId, request.Provider, request.EmailAddress, request.DisplayName, request.Folder, request.ImapHost, request.ImapPort, request.ImapUsername, request.ImapCredentialReference);
+        try
+        {
+            mailboxes.Add(mailbox);
+        }
+        catch (Exception ex)
+        {
+            var s = ex.Message;
+            throw;
+        }
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return FeatureResult<Guid>.Success(mailbox.Id, 201);
     }

@@ -356,6 +356,21 @@ namespace EmailScanner.Repository.Migrations.SqlServer
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
+                    b.Property<string>("ImapCredentialReference")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("ImapHost")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int?>("ImapPort")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImapUsername")
+                        .HasMaxLength(320)
+                        .HasColumnType("nvarchar(320)");
+
                     b.Property<DateTime?>("LastFailedSyncUtc")
                         .HasColumnType("datetime2");
 
